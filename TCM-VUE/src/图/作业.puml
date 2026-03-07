@@ -1,0 +1,469 @@
+@startuml
+top to bottom direction
+skinparam shadowing false
+skinparam defaultFontName Microsoft YaHei
+skinparam linetype ortho
+
+' Places as circles
+circle "i_w" as iw
+circle "p12" as p12
+circle "p13" as p13
+circle "p24" as p24
+circle "p35" as p35
+circle "o_w" as ow
+
+' Transitions as rectangles
+rectangle "t1" as t1
+rectangle "t2" as t2
+rectangle "t3" as t3
+rectangle "t4" as t4
+rectangle "t5" as t5
+
+' Arcs
+iw --> t1
+t1 --> p12
+t1 --> p13
+p12 --> t2
+p13 --> t3
+t2 --> p24
+t3 --> p35
+p24 --> t4
+p35 --> t5
+t4 --> ow
+t5 --> ow
+@enduml
+
+
+@startuml
+!theme plain
+
+package "控制器层" {
+  class AuthController {
+    +login()
+    +register()
+    +logout()
+    +refreshToken()
+  }
+  
+  class UserController {
+    +getUserProfile()
+    +updateUserProfile()
+    +changePassword()
+  }
+  
+  class TeacherVerificationController {
+    +submitVerification()
+    +getVerificationStatus()
+    +reviewVerification()
+  }
+}
+
+package "服务层" {
+  class UserService {
+    +createUser()
+    +updateUser()
+    +deleteUser()
+    +findUserById()
+    +findByUsername()
+  }
+  
+  class TeacherVerificationService {
+    +submitVerification()
+    +reviewVerification()
+    +getPendingVerifications()
+  }
+}
+
+package "实体层" {
+  class User {
+    -Long userId
+    -String username
+    -String password
+    -String email
+    -String role
+    -String status
+    -String realName
+    -String phone
+    -Date createdTime
+    -Date lastLoginTime
+  }
+  
+  class TeacherVerification {
+    -Long verificationId
+    -Long userId
+    -String realName
+    -String idNumber
+    -String qualificationDocs
+    -String status
+    -Date submittedTime
+    -Date verifiedTime
+    -Long verifiedBy
+    -String feedback
+  }
+}
+
+UserService ..> User : "管理"
+TeacherVerificationService ..> TeacherVerification : "管理"
+AuthController ..> UserService : "调用"
+UserController ..> UserService : "调用"
+TeacherVerificationController ..> TeacherVerificationService : "调用"
+User ||--|| TeacherVerification : "认证关联"
+@enduml
+
+@startuml
+!theme plain
+
+package "控制器层" {
+  class CourseController {
+    +createCourse()
+    +updateCourse()
+    +deleteCourse()
+    +getCourseDetails()
+    +getTeacherCourses()
+  }
+  
+  class ChapterController {
+    +addChapter()
+    +updateChapter()
+    +deleteChapter()
+    +getCourseChapters()
+  }
+}
+
+package "服务层" {
+  class CourseService {
+    +createCourse()
+    +updateCourse()
+    +submitForReview()
+    +publishCourse()
+  }
+  
+  class ChapterService {
+    +addChapter()
+    +updateChapterOrder()
+    +validateChapterAccess()
+  }
+  
+  class CourseAuditService {
+    +auditCourse()
+    +approveCourse()
+    +rejectCourse()
+  }
+}
+
+package "实体层" {
+  class Course {
+    -Long courseId
+    -String courseName
+    -String description
+    -BigDecimal price
+    -String category
+    -Long teacherId
+    -String status
+    -Date createdTime
+    -Date updatedTime
+    -Date approvedTime
+    -Long approvedBy
+  }
+  
+  class Chapter {
+    -Long chapterId
+    -Long courseId
+    -String chapterName
+    -Integer chapterOrder
+    -String description
+  }
+  
+  class Resource {
+    -Long resourceId
+    -Long chapterId
+    -String resourceName
+    -String resourceType
+    -String filePath
+    -Long fileSize
+    -Integer duration
+    -Date uploadTime
+  }
+}
+
+Course ||--o{ Chapter : "包含"
+Chapter ||--o{ Resource : "拥有"
+CourseService ..> Course : "管理"
+ChapterService ..> Chapter : "管理"
+CourseAuditService ..> Course : "审核"
+CourseController ..> CourseService : "调用"
+ChapterController ..> ChapterService : "调用"
+@enduml
+
+
+@startuml
+!theme plain
+
+package "控制器层" {
+  class LearningProgressController {
+    +updateProgress()
+    +getStudentProgress()
+    +markChapterCompleted()
+  }
+  
+  class EnrollmentController {
+    +enrollCourse()
+    +cancelEnrollment()
+    +getStudentEnrollments()
+  }
+  
+  class OrderController {
+    +createOrder()
+    +processPayment()
+    +getOrderHistory()
+  }
+}
+
+package "服务层" {
+  class LearningProgressService {
+    +updateProgress()
+    +calculateCompletionRate()
+    +getLearningStatistics()
+  }
+  
+  class EnrollmentService {
+    +enrollStudent()
+    +validateEnrollment()
+    +getEnrollmentStatus()
+  }
+  
+  class PaymentService {
+    +processPayment()
+    +validatePayment()
+    +handleRefund()
+  }
+}
+
+package "实体层" {
+  class LearningProgress {
+    -Long progressId
+    -Long studentId
+    -Long chapterId
+    -String status
+    -Date startTime
+    -Date completionTime
+    -Date lastAccessedTime
+    -Integer watchDuration
+  }
+  
+  class Enrollment {
+    -Long enrollmentId
+    -Long studentId
+    -Long courseId
+    -Date enrolledTime
+    -String status
+  }
+  
+  class Order {
+    -Long orderId
+    -Long studentId
+    -Long courseId
+    -BigDecimal amount
+    -String status
+    -Date createdTime
+    -Date paidTime
+    -String paymentMethod
+    -String transactionId
+  }
+}
+
+Enrollment }|--|| Order : "对应"
+LearningProgress }|--|| Enrollment : "关联"
+LearningProgressService ..> LearningProgress : "管理"
+EnrollmentService ..> Enrollment : "管理"
+PaymentService ..> Order : "处理"
+LearningProgressController ..> LearningProgressService : "调用"
+EnrollmentController ..> EnrollmentService : "调用"
+OrderController ..> PaymentService : "调用"
+@enduml
+
+
+
+@startuml
+!theme plain
+
+package "控制器层" {
+  class AssignmentController {
+    +createAssignment()
+    +updateAssignment()
+    +getCourseAssignments()
+  }
+  
+  class SubmissionController {
+    +submitAssignment()
+    +gradeSubmission()
+    +getStudentSubmissions()
+  }
+  
+  class ExamController {
+    +createExam()
+    +startExam()
+    +submitExam()
+  }
+}
+
+package "服务层" {
+  class AssignmentService {
+    +createAssignment()
+    +validateDeadline()
+    +calculateAverageScore()
+  }
+  
+  class SubmissionService {
+    +submitAssignment()
+    +gradeSubmission()
+    +autoGradeMultipleChoice()
+  }
+  
+  class ExamService {
+    +createExam()
+    +validateExamTime()
+    +calculateExamScore()
+  }
+  
+  class AutoGradingService {
+    +gradeMultipleChoice()
+    +gradeFillInBlank()
+  }
+  
+  class ManualGradingService {
+    +gradeEssay()
+    +gradeProgramming()
+  }
+}
+
+package "实体层" {
+  class Assignment {
+    -Long assignmentId
+    -Long courseId
+    -String assignmentName
+    -String description
+    -Date deadline
+    -BigDecimal totalScore
+    -Date createdTime
+  }
+  
+  class AssignmentSubmission {
+    -Long submissionId
+    -Long assignmentId
+    -Long studentId
+    -String submissionContent
+    -String attachmentPath
+    -Date submittedTime
+    -BigDecimal score
+    -String feedback
+    -String status
+  }
+  
+  class Exam {
+    -Long examId
+    -Long courseId
+    -String examName
+    -String description
+    -Date startTime
+    -Date endTime
+    -BigDecimal totalScore
+    -Integer duration
+    -Date createdTime
+  }
+  
+  class ExamRecord {
+    -Long recordId
+    -Long examId
+    -Long studentId
+    -Date startTime
+    -Date submitTime
+    -BigDecimal score
+    -String answers
+    -String status
+  }
+}
+
+Assignment ||--o{ AssignmentSubmission : "包含"
+Exam ||--o{ ExamRecord : "包含"
+AssignmentService ..> Assignment : "管理"
+SubmissionService ..> AssignmentSubmission : "管理"
+ExamService ..> Exam : "管理"
+AutoGradingService ..> SubmissionService : "支持"
+ManualGradingService ..> SubmissionService : "支持"
+AssignmentController ..> AssignmentService : "调用"
+SubmissionController ..> SubmissionService : "调用"
+ExamController ..> ExamService : "调用"
+@enduml
+
+
+
+@startuml
+!theme plain
+
+package "控制器层" {
+  class ReportController {
+    +getCourseStatistics()
+    +getLearningAnalytics()
+    +getFinancialReports()
+    +exportReports()
+  }
+  
+  class DashboardController {
+    +getTeacherDashboard()
+    +getStudentDashboard()
+    +getAdminDashboard()
+  }
+}
+
+package "服务层" {
+  class CourseReportService {
+    +getCourseEnrollmentStats()
+    +getCourseRevenueStats()
+    +getTeacherCourseDashboard()
+  }
+  
+  class LearningReportService {
+    +getStudentProgressStats()
+    +getCompletionRateAnalysis()
+    +getLearningBehaviorStats()
+  }
+  
+  class FinancialReportService {
+    +getRevenueReport()
+    +getPaymentStatistics()
+    +getRefundAnalysis()
+  }
+}
+
+package "导出服务" {
+  class ExcelExportService {
+    +exportCourseStats()
+    +exportLearningReport()
+    +exportFinancialReport()
+  }
+  
+  class PdfExportService {
+    +generateReportPDF()
+    +exportDashboardPDF()
+  }
+  
+  class ChartGenerator {
+    +generateEnrollmentChart()
+    +generateProgressChart()
+    +generateRevenueChart()
+  }
+}
+
+ReportController ..> CourseReportService : "调用"
+ReportController ..> LearningReportService : "调用"
+ReportController ..> FinancialReportService : "调用"
+ReportController ..> ExcelExportService : "调用"
+ReportController ..> PdfExportService : "调用"
+DashboardController ..> CourseReportService : "使用"
+DashboardController ..> LearningReportService : "使用"
+DashboardController ..> ChartGenerator : "使用"
+CourseReportService ..> ChartGenerator : "使用"
+LearningReportService ..> ChartGenerator : "使用"
+FinancialReportService ..> ChartGenerator : "使用"
+@enduml

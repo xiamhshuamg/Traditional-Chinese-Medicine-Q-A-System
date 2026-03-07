@@ -1,0 +1,93 @@
+.login-container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+
+    background:
+            radial-gradient(1200px 650px at 20% 20%, rgba(22,124,106,.14), transparent 55%),
+            radial-gradient(900px 650px at 85% 30%, rgba(43,108,176,.12), transparent 55%),
+            linear-gradient(180deg, #f8fafc 0%, var(--bg-page) 100%);
+}
+
+.login-card{
+    width: 92%;
+    max-width: 420px;
+
+    background: rgba(255,255,255,.92);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(10px);
+
+    padding: 26px 22px;
+}
+
+.login-card h2{
+    text-align:center;
+    margin: 0 0 18px;
+    font-size: 20px;
+    letter-spacing: .2px;
+    color: var(--text-main);
+}
+
+.form-group{ margin-bottom: 14px; }
+
+.form-group label{
+    display:block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--text-sub);
+}
+
+.form-group input{
+    width:100%;
+    padding: 12px 12px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+
+    font-size: 14px;
+    background: rgba(255,255,255,.95);
+    color: var(--text-main);
+    outline: none;
+
+    box-shadow: var(--shadow-sm);
+}
+.form-group input:focus{
+    border-color: rgba(22,124,106,.45);
+    box-shadow: var(--ring);
+}
+
+.login-btn{
+    width:100%;
+    padding: 12px 14px;
+
+    background: linear-gradient(135deg, var(--accent), #1f9a82);
+    color: #fff;
+
+    border: 1px solid rgba(22,124,106,.35);
+    border-radius: 999px;
+
+    font-size: 14px;
+    font-weight: 900;
+    cursor:pointer;
+
+    box-shadow: 0 16px 34px rgba(22,124,106,.18);
+    transition: transform .12s ease, filter .12s ease;
+}
+.login-btn:hover{
+    transform: translateY(-1px);
+    filter: brightness(1.02);
+}
+
+.demo-tips{
+    margin-top: 14px;
+    padding: 12px 12px;
+
+    background: rgba(22,124,106,.06);
+    border: 1px dashed rgba(22,124,106,.25);
+    border-radius: var(--radius-xl);
+
+    font-size: 12px;
+    color: var(--text-sub);
+}

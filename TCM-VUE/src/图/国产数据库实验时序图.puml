@@ -1,0 +1,104 @@
+@startuml
+actor 学生
+participant LearningController
+participant LearningService
+participant ProgressRepository
+participant EnrollmentService
+
+学生 -> LearningController: 请求课程章节列表
+LearningController -> EnrollmentService: 验证课程权限
+EnrollmentService --> LearningController: 确认有权限
+LearningController --> 学生: 显示课程章节列表
+
+学生 -> LearningController: 开始学习章节
+LearningController -> LearningService: 更新学习进度
+LearningService -> ProgressRepository: 查找现有进度记录
+ProgressRepository --> LearningService: 返回进度记录
+
+alt 首次学习此章节
+    LearningService -> ProgressRepository: 创建新的进度记录
+else 已有学习记录
+    LearningService -> ProgressRepository: 更新学习状态
+end
+
+ProgressRepository --> LearningService: 返回操作结果
+LearningService --> LearningController: 返回进度更新结果
+LearningController --> 学生: 加载章节内容
+
+学生 -> LearningController: 定时上报学习时长
+LearningController -> LearningService: 累计观看时间
+LearningService -> ProgressRepository: 更新观看时长
+
+学生 -> LearningController: 标记章节完成
+LearningController -> LearningService: 更新完成状态
+LearningService -> ProgressRepository: 设置完成状态
+ProgressRepository --> LearningService: 返回更新结果
+LearningService -> LearningService: 重新计算课程完成率
+LearningService --> LearningController: 返回完成状态
+LearningController --> 学生: 显示章节已完成
+@enduml
+
+
+@startuml
+actor 教师
+participant AssignmentController
+participant AssignmentService
+participant AssignmentRepository
+participant SubmissionService
+
+教师 -> AssignmentController: 请求待批改作业列表
+AssignmentController -> AssignmentService: 获取教师课程的作业
+AssignmentService -> AssignmentRepository: 查询作业列表
+AssignmentRepository --> AssignmentService: 返回作业数据
+AssignmentService -> SubmissionService: 获取提交情况
+SubmissionService --> AssignmentService: 返回提交统计
+AssignmentService --> AssignmentController: 返回作业列表
+AssignmentController --> 教师: 显示待批改作业列表
+
+教师 -> AssignmentController: 选择作业进行批改
+AssignmentController -> SubmissionService: 获取作业所有提交
+SubmissionService --> AssignmentController: 返回学生提交列表
+AssignmentController --> 教师: 显示学生提交列表
+
+教师 -> AssignmentController: 提交批改结果
+AssignmentController -> SubmissionService: 保存分数和反馈
+SubmissionService -> SubmissionService: 更新提交状态
+SubmissionService --> AssignmentController: 返回批改结果
+AssignmentController --> 教师: 显示批改完成
+@enduml
+
+@startuml
+actor 管理员
+participant ReportController
+participant CourseReportService
+participant LearningReportService
+participant FinancialReportService
+participant DataRepository
+
+管理员 -> ReportController: 请求课程统计数据
+ReportController -> CourseReportService: 获取课程报名统计
+CourseReportService -> DataRepository: 查询课程报名数据
+DataRepository --> CourseReportService: 返回原始数据
+CourseReportService -> CourseReportService: 计算各课程报名人数
+CourseReportService --> ReportController: 返回统计结果
+ReportController --> 管理员: 展示课程报名情况
+
+管理员 -> ReportController: 请求学习分析数据
+ReportController -> LearningReportService: 获取学习进度统计
+LearningReportService -> DataRepository: 查询学习进度数据
+DataRepository --> LearningReportService: 返回学习记录
+LearningReportService -> LearningReportService: 计算课程完成率
+LearningReportService --> ReportController: 返回分析结果
+ReportController --> 管理员: 展示学习进度统计
+
+管理员 -> ReportController: 请求财务数据
+ReportController -> FinancialReportService: 获取收入统计
+FinancialReportService -> DataRepository: 查询订单和支付数据
+DataRepository --> FinancialReportService: 返回交易记录
+FinancialReportService -> FinancialReportService: 计算总收入
+FinancialReportService --> ReportController: 返回财务报告
+ReportController --> 管理员: 展示收入统计图表
+@enduml
+
+
+

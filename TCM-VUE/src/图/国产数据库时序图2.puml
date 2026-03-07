@@ -1,0 +1,31 @@
+@startuml
+title 学生购买课程时序图
+
+actor 学生
+participant OrderController
+participant OrderService
+participant UserService
+participant CourseService
+participant EnrollmentService
+participant PaymentGateway
+
+学生 -> OrderController: 请求创建课程订单
+OrderController -> OrderService: 创建课程订单
+OrderService -> UserService: 验证学生账号状态
+UserService --> OrderService: 返回账号状态正常
+OrderService -> CourseService: 获取课程价格信息
+CourseService --> OrderService: 返回课程详情
+OrderService -> OrderService: 检查是否重复购买
+OrderService --> OrderController: 返回订单信息
+OrderController --> 学生: 显示订单确认页面
+
+学生 -> OrderController: 确认支付订单
+OrderController -> OrderService: 处理支付请求
+OrderService -> PaymentGateway: 发送支付请求
+PaymentGateway --> OrderService: 返回支付成功
+OrderService -> OrderService: 更新订单状态为已支付
+OrderService -> EnrollmentService: 开通课程学习权限
+EnrollmentService --> OrderService: 确认权限已开通
+OrderService --> OrderController: 返回支付成功
+OrderController --> 学生: 显示购买成功，可开始学习
+@enduml

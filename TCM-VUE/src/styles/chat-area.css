@@ -1,0 +1,224 @@
+/* 整个中间区域：像 DeepSeek 一样铺满，纯白、无卡片阴影 */
+.chat-layout{
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+
+    display:flex;
+    flex-direction:column;
+
+    background: #ffffff;           /*  纯白 */
+    border: none;                  /* 去掉边框 */
+    border-radius: 0;              /* 和页面融成一体 */
+    box-shadow: none;              /*不要卡片阴影 */
+    backdrop-filter: none;
+
+    overflow: hidden;
+}
+
+/* 顶部信息栏：做成类似 DeepSeek 的简洁顶部条 */
+.chat-header{
+    padding: 18px 24px 12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap: 12px;
+
+    background: #ffffff;
+    border-bottom: 1px solid rgba(15,23,42,0.06);
+}
+
+.chat-title{
+    font-size: 16px;
+    font-weight: 600;
+    display:flex;
+    align-items:center;
+    gap: 8px;
+}
+
+.chat-sub{
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--text-sub);
+}
+
+.patient-info{
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--text-sub);
+}
+
+.patient-meta{
+    margin-left: 12px;
+}
+
+/* “编辑”按钮：小圆角浅色按钮 */
+.btn-edit{
+    margin-left: 8px;
+    padding: 4px 10px;
+    font-size: 12px;
+
+    border-radius: 999px;
+    border: 1px solid rgba(148,163,184,0.75);
+    background: #f9fafb;
+    color: #475569;
+
+    cursor:pointer;
+    transition: background .12s ease, border-color .12s ease, transform .12s ease;
+}
+.btn-edit:hover{
+    background: #e5edff;
+    border-color: rgba(59,130,246,0.7);
+    transform: translateY(-1px);
+}
+
+/* 顶部右侧操作按钮区域（打印、结束、重开） */
+.chat-actions{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    gap: 8px;
+}
+
+/* 右上角按钮：圆角 pill 风格，贴近 DeepSeek */
+.btn-sm{
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 999px;
+
+    border: 1px solid rgba(37,99,235,0.30);
+    background: rgba(37,99,235,0.06);
+    color: #1d4ed8;
+
+    cursor:pointer;
+    transition: transform .12s ease, background .12s ease, border-color .12s ease, filter .12s ease;
+}
+
+.btn-sm:hover{
+    background: rgba(37,99,235,0.10);
+    border-color: rgba(37,99,235,0.40);
+    transform: translateY(-1px);
+    filter: brightness(1.02);
+}
+
+.btn-sm:disabled{
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+    filter: none;
+}
+
+/* 灰色描边按钮（打印 / 结束本次问诊） */
+.btn-sm.outline{
+    background: #ffffff;
+    color: var(--text-main);
+    border: 1px solid rgba(148,163,184,0.85);
+}
+.btn-sm.outline:hover{
+    background: #f9fafb;
+    border-color: rgba(148,163,184,1);
+}
+
+/* 下面的消息区 & 输入区样式在 message-list.css / input-area.css 里，
+   你已经按之前要求改过，这里不用再加东西 */
+/* 顶部整体布局 */
+.chat-layout{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* 顶部栏背景 + 线条 */
+.chat-header{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(148,163,184,0.35);
+    background: linear-gradient(180deg, #f9fafb 0%, #ffffff 45%);
+}
+
+/* 左侧标题区 */
+.chat-title{
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.chat-title .btn-icon{
+    margin-top: 4px;             /* 小屏展开按钮居中一点 */
+}
+
+.title-block{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.title-row{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.title{
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    line-height: 1.3;
+}
+
+.subtitle{
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* 患者/医生信息一行内点分隔 */
+.patient-info{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin-top: 2px;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.patient-meta{
+    position: relative;
+    padding-left: 10px;
+}
+
+.patient-meta::before{
+    content: "·";
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* 右侧按钮区 */
+.chat-actions{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 小屏幕下：上面标题，下面按钮 */
+@media (max-width: 960px){
+    .chat-header{
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .chat-actions{
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .chat-title{
+        width: 100%;
+    }
+}

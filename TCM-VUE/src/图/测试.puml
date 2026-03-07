@@ -1,0 +1,248 @@
+@startuml
+!theme plain
+
+title 抽象反射工厂模式 - 电脑配置商店
+
+package "com.ynu.edu.work3.Abstract_Reflection.components" {
+  interface Component {
+    + getType(): String
+    + getModel(): String
+    + getDescription(): String
+    + getPrice(): double
+  }
+  
+  interface CPU extends Component {}
+  interface GPU extends Component {}
+  interface Memory extends Component {}
+  interface Disk extends Component {}
+  interface MainBoard extends Component {}
+  
+  class I3CPU implements CPU {}
+  class I5CPU implements CPU {}
+  class I7CPU implements CPU {}
+  class I9CPU implements CPU {}
+  
+  class RTX3060 implements GPU {}
+  class RTX3080 implements GPU {}
+  class RTX3090Ti implements GPU {}
+  class RTX2080 implements GPU {}
+  class RTX2080Ti implements GPU {}
+  class RTX3080Ti implements GPU {}
+  
+  class Memory8G implements Memory {}
+  class Memory16G implements Memory {}
+  class Memory32G implements Memory {}
+  class Memory64G implements Memory {}
+  
+  class Disk512G implements Disk {}
+  class Disk1T implements Disk {}
+  class Disk2T implements Disk {}
+  class Disk4T implements Disk {}
+  
+  class ATXMainBoard implements MainBoard {}
+  class MATXMainBoard implements MainBoard {}
+  class MINIITXMainBoard implements MainBoard {}
+}
+
+package "com.ynu.edu.work3.Abstract_Reflection.factory" {
+  interface ComponentFactory {
+    + createComponent(type: String, model: String): Component
+  }
+  
+  class ReflectionComponentFactory implements ComponentFactory {
+    + createComponent(type: String, model: String): Component
+  }
+}
+
+package "com.ynu.edu.work3.Abstract_Reflection.model" {
+  class Computer {
+    + addComponent(component: Component): void
+    + getComponents(): List<Component>
+    + getTotalPrice(): double
+    + showConfiguration(): void
+  }
+}
+
+package "com.ynu.edu.work3.Abstract_Reflection.client" {
+  class ComputerStore {
+    - factory: ComponentFactory
+    + buildComputer(config: Map<String, String>): Computer
+  }
+  
+  class SimpleJson {
+    + parseObjectOfStrings(json: String): Map<String, String>
+  }
+}
+
+Component <-- ReflectionComponentFactory : creates
+ComponentFactory <-- ReflectionComponentFactory : implements
+ComputerStore --> ComponentFactory : uses
+ComputerStore --> Computer : builds
+Computer o--> Component : contains
+SimpleJson ..> ComputerStore : provides config
+ReflectionComponentFactory ..> Component : creates instances via reflection
+
+note right of ReflectionComponentFactory
+  使用反射动态创建组件实例
+  支持类型自动匹配和模型名称规范化
+end note
+
+@enduml
+
+
+@startuml
+!theme plain
+
+title 观察者模式 - 猪肉行情监控
+
+package "com.ynu.edu.work3.Observer_Pattern.subject" {
+  interface Subject {
+    + registerObserver(observer: Observer): void
+    + removeObserver(observer: Observer): void
+    + notifyObservers(): void
+  }
+  
+  class PorkData implements Subject {
+    - observers: List<Observer>
+    - priceHistory: List<Double>
+    - currentPrice: double
+    + marketChanged(newPrice: double): void
+    + getPrice(): double
+    + getPriceHistory(): List<Double>
+  }
+}
+
+package "com.ynu.edu.work3.Observer_Pattern.observers" {
+  interface Observer {
+    + update(price: double): void
+    + getReport(): String
+  }
+}
+
+package "com.ynu.edu.work3.Observer_Pattern.observers.average" {
+  class WeeklyAverageObserver implements Observer {
+    - last7: Deque<Double>
+    - weeklyAverage: double
+    + update(price: double): void
+    + getReport(): String
+  }
+}
+
+package "com.ynu.edu.work3.Observer_Pattern.observers.change" {
+  class WeeklyChangeObserver implements Observer {
+    - history: List<Double>
+    - diff: double
+    - trend: String
+    + update(price: double): void
+    + getReport(): String
+  }
+}
+
+package "com.ynu.edu.work3.Observer_Pattern.observers.statistics" {
+  class StatisticsObserver implements Observer {
+    - history: List<Double>
+    + update(price: double): void
+    + getReport(): String
+    + showPriceChart(): void
+  }
+}
+
+Subject <|-- PorkData
+Observer <|-- WeeklyAverageObserver
+Observer <|-- WeeklyChangeObserver
+Observer <|-- StatisticsObserver
+PorkData o--> Observer : notifies
+
+note left of PorkData
+  主题(Subject)维护观察者列表
+  当价格变化时调用marketChanged()
+  自动通知所有注册的观察者
+end note
+
+@enduml
+
+
+
+@startuml
+!theme plain
+
+title 装饰器模式 - 云南米线店
+
+package "com.ynu.edu.work3.Decorator_Pattern.component" {
+  abstract class RiceNoodle {
+    # description: String
+    + getDescription(): String
+    + cost(): double
+  }
+}
+
+package "com.ynu.edu.work3.Decorator_Pattern.component.basic" {
+  class DryRiceNoodle extends RiceNoodle {
+    + cost(): double
+  }
+  
+  class SourRiceNoodle extends RiceNoodle {
+    + cost(): double
+  }
+  
+  class WaterRiceNoodle extends RiceNoodle {
+    + cost(): double
+  }
+}
+
+package "com.ynu.edu.work3.Decorator_Pattern.component.decorator" {
+  abstract class ToppingDecorator extends RiceNoodle {
+    # riceNoodle: RiceNoodle
+    + getDescription(): String
+  }
+}
+
+package "com.ynu.edu.work3.Decorator_Pattern.component.decorator.tofu" {
+  class TofuTopping extends ToppingDecorator {
+    + getDescription(): String
+    + cost(): double
+  }
+}
+
+package "com.ynu.edu.work3.Decorator_Pattern.component.decorator.egg" {
+  class EggTopping extends ToppingDecorator {
+    + getDescription(): String
+    + cost(): double
+  }
+}
+
+package "com.ynu.edu.work3.Decorator_Pattern.component.decorator.beef" {
+  class BeefTopping extends ToppingDecorator {
+    + getDescription(): String
+    + cost(): double
+  }
+}
+
+package "com.ynu.edu.work3.Decorator_Pattern.model" {
+  class Order {
+    - items: List<RiceNoodle>
+    + addItem(item: RiceNoodle): void
+    + getTotalPrice(): double
+    + printOrder(): void
+  }
+}
+
+RiceNoodle <|-- DryRiceNoodle
+RiceNoodle <|-- SourRiceNoodle
+RiceNoodle <|-- WaterRiceNoodle
+RiceNoodle <|-- ToppingDecorator
+
+ToppingDecorator <|-- TofuTopping
+ToppingDecorator <|-- EggTopping
+ToppingDecorator <|-- BeefTopping
+
+ToppingDecorator *--> RiceNoodle : wraps
+Order o--> RiceNoodle : contains
+
+note right of ToppingDecorator
+  装饰器类包裹基础组件
+  可以多层嵌套叠加配料
+  扩展功能而不修改原有类
+end note
+
+@enduml

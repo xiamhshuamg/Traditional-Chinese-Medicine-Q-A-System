@@ -1,0 +1,356 @@
+@startuml
+!theme plain
+
+' 实体类
+class Consultation {
+  - id: Long
+  - doctorId: Long
+  - patientId: Long
+  - status: String
+  - startTime: LocalDateTime
+  - endTime: LocalDateTime
+  - lastActiveTime: LocalDateTime
+  - chiefComplaint: String
+  - presentHistory: String
+  - tonguePulse: String
+  - tcmDiagnosis: String
+  - westernDiagnosis: String
+  - prescriptionJson: String
+  - summary: String
+  - createdAt: LocalDateTime
+  - updatedAt: LocalDateTime
+}
+
+class ConsultMessage {
+  - id: Long
+  - consultationId: Long
+  - senderType: String
+  - senderId: Long
+  - role: String
+  - content: String
+  - createdAt: LocalDateTime
+}
+
+class Doctor {
+  - id: Long
+  - username: String
+  - password: String
+  - name: String
+  - dept: String
+  - totalConsultCount: Integer
+  - todayConsultCount: Integer
+  - lastConsultDate: LocalDate
+  - createdAt: LocalDateTime
+  - updatedAt: LocalDateTime
+}
+
+class Patient {
+  - id: Long
+  - name: String
+  - gender: String
+  - birthday: LocalDate
+  - phone: String
+  - idNumber: String
+  - createdAt: LocalDateTime
+  - updatedAt: LocalDateTime
+}
+
+' 知识图谱实体类
+class Herb {
+  - id: String
+  - name: String
+  - source: String
+  - dosage: Double
+}
+
+class PrescriptionFormula {
+  - id: String
+  - name: String
+}
+
+class Symptom {
+  - id: String
+  - name: String
+  - source: String
+}
+
+class Syndrome {
+  - id: String
+  - name: String
+}
+
+' 数据访问接口
+interface ConsultationMapper {
+  + insert(Consultation): void
+  + findById(Long): Consultation
+  + updateWhenFinish(Consultation): void
+  + updateLastActive(Long, LocalDateTime): void
+  + findByDoctor(Long): List<Consultation>
+  + updatePatientId(Long, Long): void
+}
+
+interface ConsultMessageMapper {
+  + insert(ConsultMessage): void
+  + findByConsultationId(Long): List<ConsultMessage>
+}
+
+interface DoctorMapper {
+  + findById(Long): Doctor
+  + findByUsername(String): Doctor
+  + insert(Doctor): void
+  + increaseConsultCountOnFinish(Long): void
+}
+
+interface PatientMapper {
+  + findById(Long): Patient
+  + insert(Patient): void
+  + update(Patient): void
+}
+
+interface HerbRepository {
+  + findByName(String): Herb
+}
+
+' 服务类
+class ConsultationService {
+  - consultationMapper: ConsultationMapper
+  - consultMessageMapper: ConsultMessageMapper
+  - doctorMapper: DoctorMapper
+  + startConsultation(Long, Long): Consultation
+  + appendMessage(Long, String, Long, String, String): ConsultMessage
+  + finishConsultation(Consultation): void
+  + getMessages(Long): List<ConsultMessage>
+  + findById(Long): Consultation
+}
+
+class PrescriptionService {
+  - knowledgeGraphService: KnowledgeGraphService
+  - llmService: LlmService
+  + recommend(String): Map<String, Object>
+  + buildGraphStrictPrompt(String, Map<String, Object>): String
+  + buildFallbackPrompt(String, List<String>, List<String>): String
+  - baseResult(boolean, List<Map<String, Object>>): Map<String, Object>
+  - castSyndromes(Object): List<Map<String, Object>>
+  - countStats(List<Map<String, Object>>): Map<String, Object>
+  - toParagraph(String): String
+  - toCompactJson(Object): String
+}
+
+class KnowledgeGraphService {
+  - neo4jClient: Neo4jClient
+  + findSymptomNamesInRawText(String): List<String>
+  + findSyndromesBySymptomNames(List<String>, int): List<Map<String, Object>>
+  + findTypicalSymptomsBySyndromeId(String): List<String>
+  + findFormulasBySyndromeId(String): List<Map<String, Object>>
+  + analyzeWithKnowledgeGraph(String): KnowledgeGraphResult
+  + buildHintFromText(String): String
+}
+
+class KnowledgeGraphResult {
+  - hasValidAnalysis: boolean
+  - analysisText: String
+  - matchedSymptoms: List<String>
+  - matchedSyndromes: List<String>
+  + getHasValidAnalysis(): boolean
+  + setHasValidAnalysis(boolean): void
+  + getAnalysisText(): String
+  + setAnalysisText(String): void
+  + getMatchedSymptoms(): List<String>
+  + setMatchedSymptoms(List<String>): void
+  + getMatchedSyndromes(): List<String>
+  + setMatchedSyndromes(List<String>): void
+}
+
+class ChatService {
+  - chatClient: ChatClient
+  - knowledgeGraphService: KnowledgeGraphService
+  + processChat(String, Long): String
+  + cleanResponse(String): String
+  - buildEnhancedPrompt(String, KnowledgeGraphResult): String
+}
+
+class PdfService {
+  - pdfClient: ChatClient
+  - vectorStore: VectorStore
+  + chatWithPdf(String, String, Resource): String
+  + processPdfUpload(String, MultipartFile): void
+}
+
+' 控制器类
+class ChatController {
+  - chatClient: ChatClient
+  - consultationService: ConsultationService
+  - knowledgeGraphService: KnowledgeGraphService
+  + chatPlain(Long, String): String
+  - cleanResponse(String): String
+}
+
+class ConsultationController {
+  - consultationService: ConsultationService
+  - doctorMapper: DoctorMapper
+  - patientMapper: PatientMapper
+  - consultationMapper: ConsultationMapper
+  + doctorLogin(LoginRequest): Doctor
+  + start(Long, Long): Consultation
+  + addMessage(Long, AddMessageRequest): ConsultMessage
+  + getMessages(Long): List<ConsultMessage>
+  + finish(Long, Consultation): void
+  + updatePatientInfo(Long, UpdatePatientRequest): Result
+  + getDoctorStats(Long): Map<String, Object>
+  + listByDoctor(Long): List<Consultation>
+}
+
+class GraphChatController {
+  - prescriptionService: PrescriptionService
+  + recommendText(String): ResponseEntity<Map<String, Object>>
+  + chat(String): String
+}
+
+class PdfController {
+  - fileRepository: FileRepository
+  - pdfService: PdfService
+  + chat(String, String): String
+  + uploadPdf(String, MultipartFile): Result
+  + download(String): ResponseEntity<Resource>
+}
+
+' 接口
+interface FileRepository {
+  + save(String, Resource): boolean
+  + getFile(String): Resource
+}
+
+interface LlmService {
+  + generate(String): String
+}
+
+' 实现类
+class LocalPdfFileRepository {
+  - vectorStore: VectorStore
+  - chatFiles: Map<String, String>
+  - storageDir: String
+  + save(String, Resource): boolean
+  + getFile(String): Resource
+}
+
+class SpringAiLlmService {
+  - chatClient: ChatClient
+  + generate(String): String
+}
+
+' 视图对象类
+class MessageVO {
+  - role: String
+  - content: String
+  + MessageVO(Message)
+}
+
+class Result {
+  - ok: Integer
+  - msg: String
+  + ok(): Result
+  + fail(String): Result
+}
+
+class LoginRequest {
+  - doctorId: Long
+  - name: String
+}
+
+class AddMessageRequest {
+  - senderType: String
+  - senderId: Long
+  - role: String
+  - content: String
+}
+
+class UpdatePatientRequest {
+  - name: String
+  - gender: String
+  - age: Integer
+  - phone: String
+  - idNumber: String
+}
+
+' 配置类
+class CommonConfiguration {
+  + chatClient(ChatModel): ChatClient
+  + pdfClient(ChatModel): ChatClient
+  + gameChatClient(ChatModel): ChatClient
+}
+
+class VectorStoreConfig {
+  + vectorStore(EmbeddingModel): VectorStore
+}
+
+class SystemConstants {
+  - GAME_SYSTEM_PROMPT: String
+}
+
+class VectorDistanceUtils {
+  - EPSILON: double
+  + euclideanDistance(float[], float[]): double
+  + cosineDistance(float[], float[]): double
+  - validateVectors(float[], float[]): void
+}
+
+' 核心关联关系 - 使用正确的UML关系类型
+
+' 组合关系：整体与部分，生命周期一致
+Consultation *-- "many" ConsultMessage : 组合
+
+' 关联关系：对象之间的引用关系
+Consultation --> "1" Doctor : 关联
+Consultation --> "1" Patient : 关联
+
+' 依赖关系：一个类使用另一个类
+ConsultationService ..> ConsultationMapper : 依赖
+ConsultationService ..> ConsultMessageMapper : 依赖
+ConsultationService ..> DoctorMapper : 依赖
+
+PrescriptionService ..> KnowledgeGraphService : 依赖
+PrescriptionService ..> LlmService : 依赖
+
+KnowledgeGraphService ..> Herb : 依赖
+KnowledgeGraphService ..> PrescriptionFormula : 依赖
+KnowledgeGraphService ..> Symptom : 依赖
+KnowledgeGraphService ..> Syndrome : 依赖
+
+ChatController ..> ConsultationService : 依赖
+ChatController ..> KnowledgeGraphService : 依赖
+
+ConsultationController ..> ConsultationService : 依赖
+ConsultationController ..> DoctorMapper : 依赖
+ConsultationController ..> PatientMapper : 依赖
+ConsultationController ..> ConsultationMapper : 依赖
+
+GraphChatController ..> PrescriptionService : 依赖
+
+PdfController ..> FileRepository : 依赖
+PdfController ..> PdfService : 依赖
+
+' 泛化关系：接口实现
+LocalPdfFileRepository ..|> FileRepository : 实现
+SpringAiLlmService ..|> LlmService : 实现
+
+' 关联关系：数据访问层与实体
+ConsultationMapper --> Consultation : 关联
+ConsultMessageMapper --> ConsultMessage : 关联
+DoctorMapper --> Doctor : 关联
+PatientMapper --> Patient : 关联
+HerbRepository --> Herb : 关联
+
+ChatService ..> KnowledgeGraphService : 依赖
+
+KnowledgeGraphService --> KnowledgeGraphResult : 关联
+
+' 依赖关系：控制器与VO对象
+ChatController ..> ChatService : 依赖
+ConsultationController ..> Result : 依赖
+ConsultationController ..> LoginRequest : 依赖
+ConsultationController ..> AddMessageRequest : 依赖
+ConsultationController ..> UpdatePatientRequest : 依赖
+
+CommonConfiguration ..> SystemConstants : 依赖
+
+@enduml

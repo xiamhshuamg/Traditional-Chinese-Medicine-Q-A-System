@@ -1,0 +1,184 @@
+.chat-input-area{
+    padding: 14px 14px 14px;
+    background: #ffffff;  /* 和整体页面同色 */
+    border-top: none;
+}
+
+/* 外层只是一个轻微描边的“凹槽感” */
+.composer{
+    position: relative;
+    border: 1px solid rgba(148, 163, 184, 0.30);
+    border-radius: 18px;
+    background: #ffffff;   /* 与外部背景一致 */
+
+    box-shadow: 0 1px 4px rgba(15,23,42,0.03);
+    padding: 10px;
+    transition: border-color .14s ease, box-shadow .14s ease;
+}
+
+.composer:focus-within{
+    border-color: rgba(37, 99, 235, 0.24);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+}
+
+.composer.is-disabled{ opacity: .96; }
+
+.file-hidden{ display:none; }
+
+/* 文件提示：弱化一点 */
+.file-mini{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+
+    padding: 4px 8px;
+    border-radius: 10px;
+
+    background: rgba(148,163,184,0.10);
+    color: rgba(15,23,42,0.90);
+
+    margin-bottom: 6px;
+}
+
+.file-mini-name{
+    min-width: 0;
+    max-width: 520px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.file-mini-status{
+    font-size: 12px;
+    color: rgba(100,116,139,0.95);
+}
+
+.file-mini-x{
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(15,23,42,0.06);
+    cursor: pointer;
+    color: rgba(100,116,139,0.95);
+    line-height: 20px;
+    font-size: 14px;
+    padding: 0;
+}
+.file-mini-x:hover{ background: rgba(15,23,42,0.10); }
+
+/* 主行：输入 + 内嵌按钮 */
+.main-row{
+    position: relative;
+}
+
+/* 输入框本身完全透明背景，仅靠外层框来表现区域 */
+.chat-input{
+    width: 100%;
+    min-height: 44px;
+    max-height: 120px;
+    resize: none;
+
+    padding: 10px 104px 10px 12px; /* 右侧预留给按钮 */
+
+    border: none;
+    outline: none;
+    border-radius: 14px;
+    background: transparent;
+
+    color: rgba(15,23,42,0.92);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.chat-input::placeholder{
+    color: rgba(100, 116, 139, 0.82);
+}
+
+.chat-input:disabled{
+    color: rgba(100,116,139,0.95);
+    cursor: not-allowed;
+}
+
+/* 右下角按钮组：嵌在同一框中 */
+.actions{
+    position: absolute;
+    right: 8px;
+    bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 文件按钮：轻量 icon */
+.file-btn{
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color: rgba(148,163,184,0.95);
+    transition: background .12s ease, transform .12s ease, color .12s ease;
+}
+
+.file-btn:hover{
+    background: rgba(15,23,42,0.06);
+    transform: translateY(-1px);
+    color: rgba(71,85,105,1);
+}
+
+.file-btn:disabled{
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.icon{ width: 18px; height: 18px; }
+
+/* 发送按钮：小圆圈向上箭头，阴影较轻 */
+.send-btn{
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+
+    border: none;
+    background: linear-gradient(135deg, rgba(37,99,235,0.92), rgba(59,130,246,0.82));
+    color: #fff;
+
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.16);
+    transition: transform .12s ease, filter .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+
+.send-btn:hover{
+    filter: brightness(1.02);
+    transform: translateY(-1px);
+}
+
+.send-btn:disabled{
+    opacity: .45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.send-icon{ width: 18px; height: 18px; }
+
+@media (max-width: 640px){
+    .chat-input{
+        padding-right: 96px;
+    }
+}

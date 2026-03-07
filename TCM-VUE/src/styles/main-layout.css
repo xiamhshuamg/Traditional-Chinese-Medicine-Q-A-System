@@ -1,0 +1,42 @@
+.main-container{
+    display:flex;
+    width: 100%;
+    height: 100vh;        /* 直接用视口高度，保证铺满 */
+    overflow:hidden;
+    min-height: 0;
+
+    padding: 0;           /*去掉外边空隙 */
+    gap: 0;               /*去掉中间空隙 */
+    align-items: stretch;
+    position: relative;
+    background: #ffffff;
+}
+
+/* 收起态左侧窄栏也要占满高度且贴边 */
+.sidebar-gutter{
+    width: 56px;
+    flex: 0 0 56px;
+    height: 100%;
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+    padding: 12px 8px;
+
+    align-items:center;
+    background: #ffffff;
+    border-right: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.sidebar-gutter .icon-btn{
+    width: 38px;
+    height: 38px;
+    border-radius: 14px;
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    background: #ffffff;
+    cursor: pointer;
+    font-weight: 700;
+}
+.sidebar-gutter .icon-btn:hover{
+    background: rgba(37,99,235,0.08);
+    border-color: rgba(37,99,235,0.22);
+}

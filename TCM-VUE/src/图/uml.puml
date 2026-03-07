@@ -1,0 +1,82 @@
+@startuml
+title 中医AI问诊系统部署架构
+
+actor "用户" as user
+
+rectangle "前端层" {
+  [Web界面] as web
+  [API网关] as gateway
+  [负载均衡器] as lb
+}
+
+rectangle "应用层" {
+  [Spring Boot\nJava服务] as java
+  [业务逻辑\n控制器/服务] as service
+}
+
+rectangle "数据层" {
+  [Redis缓存\n用户会话/固定数据] as redis
+  [MySQL数据库\n用户信息/问诊记录] as mysql
+}
+
+rectangle "AI服务层" {
+  [DeepSeek\n大模型API] as deepseek
+  [知识图谱\nNeo4j] as neo4j
+  [向量数据库\nPDF检索] as vector_db
+}
+
+rectangle "基础设施" {
+  [文件存储\nPDF文档] as storage
+  [消息队列\n异步处理] as mq
+  [配置中心] as config
+  [监控告警] as monitor
+}
+
+' 主要数据流
+user --> web : "访问系统"
+web --> gateway : "API请求"
+gateway --> lb : "流量分发"
+lb --> java : "服务调用"
+java --> service : "业务处理"
+
+service --> redis : "缓存读写"
+service --> mysql : "数据持久化"
+service --> deepseek : "AI对话"
+service --> neo4j : "知识图谱查询"
+service --> vector_db : "向量检索"
+service --> storage : "文件存取"
+
+' 辅助组件连接
+java --> mq : "异步任务"
+java --> config : "配置管理"
+java --> monitor : "指标上报"
+
+' 内部连接
+deepseek --> neo4j : "知识增强"
+deepseek --> vector_db : "文档检索"
+
+note right of user
+  <b>核心业务流程：</b>
+  1. 用户通过Web界面访问
+  2. 请求经过网关和负载均衡
+  3. Java服务处理业务逻辑
+  4. Redis缓存提升性能
+  5. MySQL持久化核心数据
+  6. DeepSeek提供AI能力
+  7. 知识图谱辅助诊断
+  8. 向量库支持PDF问答
+end note
+
+' 部署环境
+cloud {
+  [云服务平台\nDocker/K8s] as cloud
+}
+
+web ..> cloud
+gateway ..> cloud
+java ..> cloud
+redis ..> cloud
+mysql ..> cloud
+deepseek ..> cloud
+
+@enduml

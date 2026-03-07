@@ -1,0 +1,134 @@
+@startuml
+title AI智能分析与处方推荐功能时序图
+
+actor "医生" as Doctor
+participant "ChatController\nchatPlain()" as ChatController
+participant "ConsultationService\ngetMessages()" as ConsultationService
+participant "KnowledgeGraphService\nanalyzeWithKnowledgeGraph()" as KGService
+participant "ChatClient\nprompt().call()" as ChatClient
+participant "ConsultationService\nappendMessage()" as MessageService
+participant "Neo4j图数据库" as Neo4j
+
+Doctor -> ChatController: 输入患者症状描述\nGET /ai/chat/plain
+activate ChatController
+
+ChatController -> ConsultationService: 获取问诊历史记录\ngetMessages(consultationId)
+activate ConsultationService
+ConsultationService --> ChatController: 返回历史对话消息
+deactivate ConsultationService
+
+ChatController -> KGService: 执行知识图谱分析\nanalyzeWithKnowledgeGraph(症状文本)
+activate KGService
+
+KGService -> KGService: 提取症状实体\nfindSymptomNamesInRawText()
+KGService -> Neo4j: 查询匹配的症状节点
+activate Neo4j
+Neo4j --> KGService: 返回症状实体列表
+deactivate Neo4j
+
+KGService -> KGService: 匹配相关证型\nfindSyndromesBySymptomNames()
+KGService -> Neo4j: 查询证型关系网络
+activate Neo4j
+Neo4j --> KGService: 返回证型及权重
+deactivate Neo4j
+
+KGService -> KGService: 获取详细信息\nfindTypicalSymptomsBySyndromeId()\nfindFormulasBySyndromeId()
+KGService -> Neo4j: 查询典型症状和方剂
+activate Neo4j
+Neo4j --> KGService: 返回完整知识数据
+deactivate Neo4j
+
+KGService --> ChatController: 返回知识图谱分析结果\n包含症状、证型、方剂信息
+deactivate KGService
+
+ChatController -> ChatController: 构建增强提示词\n整合历史对话和知识图谱结果
+
+ChatController -> ChatClient: 调用大语言模型生成回答\nprompt(增强提示词).call()
+activate ChatClient
+ChatClient --> ChatController: 返回AI生成的辨证分析和处方建议
+deactivate ChatClient
+
+ChatController -> MessageService: 保存AI回答到数据库\nappendMessage(consultationId, "AI", "assistant", 回答)
+activate MessageService
+MessageService --> ChatController: 确认消息保存成功
+deactivate MessageService
+
+ChatController -> ChatController: 清理回复格式\ncleanResponse()
+
+ChatController --> Doctor: 返回智能分析和处方推荐\n包含辨证思路和用药建议
+deactivate ChatController
+
+@enduml
+
+
+@startuml
+title 病历编辑与打印导出功能时序图
+
+actor "医生" as Doctor
+participant "ConsultationReportController\nreportHtml()" as ReportController
+participant "ConsultationReportService\nbuild()" as ReportService
+participant "ConsultationService\nfindById()" as ConsultationService
+participant "DoctorMapper\nfindById()" as DoctorMapper
+participant "PatientMapper\nfindById()" as PatientMapper
+participant "ConsultationReportService\nbuildPdf()" as PdfService
+participant "PdfRendererBuilder" as PdfRenderer
+participant "浏览器" as Browser
+
+Doctor -> ReportController: 请求病历预览页面\nGET /api/consultations/{id}/report/html
+activate ReportController
+
+ReportController -> ReportService: 构建病历数据\nbuild(consultationId)
+activate ReportService
+
+ReportService -> ConsultationService: 获取问诊基本信息\nfindById(consultationId)
+activate ConsultationService
+ConsultationService --> ReportService: 返回问诊记录
+deactivate ConsultationService
+
+ReportService -> DoctorMapper: 获取医生信息\nfindById(doctorId)
+activate DoctorMapper
+DoctorMapper --> ReportService: 返回医生资料
+deactivate DoctorMapper
+
+ReportService -> PatientMapper: 获取患者信息\nfindById(patientId)
+activate PatientMapper
+PatientMapper --> ReportService: 返回患者信息
+deactivate PatientMapper
+
+ReportService -> ReportService: 解析AI建议内容\nsplitAiMessage()\nparseHerbs()
+
+ReportService --> ReportController: 返回完整病历数据对象\nConsultationReportVO
+deactivate ReportController
+
+ReportController -> ReportController: 生成可编辑的HTML页面\n包含四个可修改区域
+
+ReportController --> Doctor: 返回病历预览页面\n支持在线编辑症状、证型、药方、医嘱
+deactivate ReportController
+
+Doctor -> Browser: 在浏览器中编辑病历内容\n修改症状描述、调整证型、完善药方、补充医嘱
+activate Browser
+Browser --> Doctor: 实时预览编辑效果
+deactivate Browser
+
+Doctor -> ReportController: 提交编辑后的病历\nPOST /api/consultations/{id}/report/pdf
+activate ReportController
+
+ReportController -> PdfService: 生成PDF文档\nbuildPdf(consultationId, editedDraft)
+activate PdfService
+
+PdfService -> PdfService: 构建打印用HTML内容\nbuildPrintableHtml()
+
+PdfService -> PdfRenderer: 创建PDF渲染器\nPdfRendererBuilder()
+activate PdfRenderer
+PdfRenderer -> PdfRenderer: 设置中文字体\ntryUseWindowsFont()
+PdfRenderer -> PdfRenderer: 转换HTML为PDF
+PdfRenderer --> PdfService: 生成PDF字节流
+deactivate PdfRenderer
+
+PdfService --> ReportController: 返回PDF文件字节数组
+deactivate PdfService
+
+ReportController --> Doctor: 返回可下载的PDF病历文件\n包含医生编辑后的所有内容
+deactivate ReportController
+
+@enduml

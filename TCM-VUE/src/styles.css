@@ -1,0 +1,547 @@
+/*:root {*/
+/*    --bg-page: #f5f5f5;*/
+/*    --bg-panel: #ffffff;*/
+/*    --bg-soft: #fafafa;*/
+/*    --border-subtle: #e5e7eb;*/
+/*    --accent: #2563eb;*/
+/*    --text-main: #111827;*/
+/*    --text-sub: #6b7280;*/
+/*    --radius-xl: 18px;*/
+/*    --radius-md: 12px;*/
+/*    --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;*/
+/*}*/
+
+/** {*/
+/*    box-sizing: border-box;*/
+/*}*/
+
+/*html, body, #app {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    height: 100%;*/
+/*}*/
+
+/*body {*/
+/*    font-family: var(--font-sans);*/
+/*    background: var(--bg-page);*/
+/*    color: var(--text-main);*/
+/*}*/
+
+/*!* 登录界面样式 *!*/
+/*.login-container {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    height: 100vh;*/
+/*    background: var(--bg-page);*/
+/*}*/
+
+/*.login-card {*/
+/*    background: var(--bg-panel);*/
+/*    padding: 2rem;*/
+/*    border-radius: var(--radius-xl);*/
+/*    box-shadow: 0 10px 25px rgba(0,0,0,0.1);*/
+/*    width: 90%;*/
+/*    max-width: 400px;*/
+/*}*/
+
+/*.login-card h2 {*/
+/*    text-align: center;*/
+/*    margin-bottom: 1.5rem;*/
+/*    color: var(--text-main);*/
+/*}*/
+
+/*.form-group {*/
+/*    margin-bottom: 1rem;*/
+/*}*/
+
+/*.form-group label {*/
+/*    display: block;*/
+/*    margin-bottom: 0.5rem;*/
+/*    font-size: 14px;*/
+/*    color: var(--text-main);*/
+/*}*/
+
+/*.form-group input {*/
+/*    width: 100%;*/
+/*    padding: 0.75rem;*/
+/*    border: 1px solid var(--border-subtle);*/
+/*    border-radius: var(--radius-md);*/
+/*    font-size: 14px;*/
+/*    background: var(--bg-panel);*/
+/*    color: var(--text-main);*/
+/*}*/
+
+/*.form-group input:focus {*/
+/*    outline: none;*/
+/*    border-color: var(--accent);*/
+/*    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);*/
+/*}*/
+
+/*.login-btn {*/
+/*    width: 100%;*/
+/*    padding: 0.75rem;*/
+/*    background: var(--accent);*/
+/*    color: white;*/
+/*    border: none;*/
+/*    border-radius: var(--radius-md);*/
+/*    font-size: 14px;*/
+/*    cursor: pointer;*/
+/*    margin-top: 1rem;*/
+/*}*/
+
+/*.login-btn:hover {*/
+/*    background: #1d4ed8;*/
+/*}*/
+
+/*.demo-tips {*/
+/*    margin-top: 1rem;*/
+/*    padding: 1rem;*/
+/*    background: var(--bg-soft);*/
+/*    border-radius: var(--radius-md);*/
+/*    font-size: 12px;*/
+/*    color: var(--text-sub);*/
+/*}*/
+
+/*!* 主界面布局 *!*/
+/*.main-container {*/
+/*    display: flex;*/
+/*    height: 100vh;*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*.app-root {*/
+/*    height: 100%;*/
+/*}*/
+
+/*!* 左侧边栏 *!*/
+/*.sidebar {*/
+/*    width: 260px;*/
+/*    background: var(--bg-panel);*/
+/*    border-right: 1px solid var(--border-subtle);*/
+/*    padding: 14px 12px;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    gap: 10px;*/
+/*    height: 100%;*/
+/*    overflow-y: auto;*/
+/*}*/
+
+/*.logo-area {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    gap: 8px;*/
+/*}*/
+/*.logo-dot {*/
+/*    width: 16px;*/
+/*    height: 16px;*/
+/*    border-radius: 999px;*/
+/*    background: var(--accent);*/
+/*}*/
+/*.logo-title {*/
+/*    font-size: 14px;*/
+/*    font-weight: 600;*/
+/*}*/
+/*.logo-sub {*/
+/*    font-size: 10px;*/
+/*    color: var(--text-sub);*/
+/*}*/
+
+/*.doctor-card {*/
+/*    padding: 10px;*/
+/*    border-radius: 14px;*/
+/*    background: var(--bg-soft);*/
+/*    border: 1px solid var(--border-subtle);*/
+/*    position: relative;*/
+/*}*/
+/*.doctor-name {*/
+/*    font-size: 14px;*/
+/*    font-weight: 600;*/
+/*}*/
+/*.doctor-meta {*/
+/*    margin-top: 4px;*/
+/*    font-size: 11px;*/
+/*    color: var(--text-sub);*/
+/*}*/
+
+/*.btn-logout {*/
+/*    margin-top: 0.5rem;*/
+/*    padding: 0.25rem 0.5rem;*/
+/*    font-size: 10px;*/
+/*    background: #ef4444;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    border-radius: 999px;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.sidebar-header {*/
+/*    margin-top: 4px;*/
+/*    padding: 0 4px;*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*    font-size: 11px;*/
+/*    color: var(--text-sub);*/
+/*}*/
+
+/*.btn-xs {*/
+/*    padding: 2px 8px;*/
+/*    font-size: 10px;*/
+/*    border-radius: 999px;*/
+/*    border: 1px solid var(--accent);*/
+/*    background: transparent;*/
+/*    color: var(--accent);*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.consult-list {*/
+/*    flex: 1;*/
+/*    padding: 4px 2px;*/
+/*    overflow-y: auto;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    gap: 6px;*/
+/*}*/
+
+/*.consult-item {*/
+/*    padding: 6px 8px;*/
+/*    border-radius: 12px;*/
+/*    border: 1px solid transparent;*/
+/*    background: var(--bg-soft);*/
+/*    cursor: pointer;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    gap: 2px;*/
+/*}*/
+/*.consult-item.active,*/
+/*.consult-item:hover {*/
+/*    border-color: var(--accent);*/
+/*    background: #e5f0ff;*/
+/*}*/
+
+/*.line1 {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*}*/
+/*.line2 {*/
+/*    font-size: 11px;*/
+/*    color: var(--text-sub);*/
+/*}*/
+/*.tag-sm {*/
+/*    padding: 0 6px;*/
+/*    border-radius: 999px;*/
+/*    font-size: 9px;*/
+/*    border: 1px solid var(--border-subtle);*/
+/*}*/
+/*.tag-green {*/
+/*    background: #bbf7d0;*/
+/*    color: #166534;*/
+/*}*/
+/*.tag-gray {*/
+/*    background: #e5e7eb;*/
+/*    color: #6b7280;*/
+/*}*/
+/*.time-text {*/
+/*    font-size: 9px;*/
+/*    color: var(--text-sub);*/
+/*}*/
+/*.empty-tip {*/
+/*    font-size: 11px;*/
+/*    color: var(--text-sub);*/
+/*}*/
+
+/*!* 右侧聊天区 *!*/
+/*.chat-layout {*/
+/*    flex: 1;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    padding: 14px 16px 10px;*/
+/*    gap: 8px;*/
+/*    min-height: 0;*/
+/*    height: 100%;*/
+/*}*/
+
+/*.chat-header {*/
+/*    padding: 10px 12px;*/
+/*    border-radius: var(--radius-xl);*/
+/*    border: 1px solid var(--border-subtle);*/
+/*    background: var(--bg-panel);*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: flex-start;*/
+/*    gap: 10px;*/
+/*}*/
+/*.chat-title {*/
+/*    font-size: 16px;*/
+/*    font-weight: 600;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    gap: 8px;*/
+/*}*/
+/*.chat-sub {*/
+/*    font-size: 11px;*/
+/*    color: var(--text-sub);*/
+/*}*/
+
+/*!* 患者信息样式 *!*/
+/*.patient-info {*/
+/*    margin-top: 4px;*/
+/*    font-size: 12px;*/
+/*    color: var(--text-sub);*/
+/*}*/
+
+/*.patient-meta {*/
+/*    margin-left: 12px;*/
+/*}*/
+
+/*.btn-edit {*/
+/*    padding: 2px 6px;*/
+/*    font-size: 10px;*/
+/*    background: transparent;*/
+/*    border: 1px solid var(--border-subtle);*/
+/*    border-radius: 4px;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.chat-actions {*/
+/*    display: flex;*/
+/*    gap: 6px;*/
+/*}*/
+/*.btn-sm {*/
+/*    padding: 5px 10px;*/
+/*    font-size: 11px;*/
+/*    border-radius: 999px;*/
+/*    border: 1px solid var(--accent);*/
+/*    background: var(--accent);*/
+/*    color: #fff;*/
+/*    cursor: pointer;*/
+/*}*/
+/*.btn-sm.outline {*/
+/*    background: transparent;*/
+/*    color: var(--accent);*/
+/*}*/
+/*.btn-sm.outline:hover {*/
+/*    background: #eff6ff;*/
+/*}*/
+
+/*!* 聊天区域 *!*/
+/*.chat-body {*/
+/*    flex: 1;*/
+/*    min-height: 0;*/
+/*    padding: 10px 8px;*/
+/*    border-radius: var(--radius-md);*/
+/*    border: 1px solid var(--border-subtle);*/
+/*    background: var(--bg-panel);*/
+/*    overflow: hidden;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*}*/
+
+/*.msg-list {*/
+/*    flex: 1;*/
+/*    min-height: 0;*/
+/*    overflow-y: auto;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    gap: 8px;*/
+/*}*/
+
+/*.welcome {*/
+/*    margin-top: 8px;*/
+/*    padding: 10px 12px;*/
+/*    border-radius: var(--radius-md);*/
+/*    background: var(--bg-soft);*/
+/*    border: 1px dashed var(--border-subtle);*/
+/*    font-size: 12px;*/
+/*    color: var(--text-sub);*/
+/*}*/
+/*.welcome-title {*/
+/*    font-size: 14px;*/
+/*    font-weight: 600;*/
+/*    color: var(--text-main);*/
+/*    margin-bottom: 4px;*/
+/*}*/
+
+/*.msg-row {*/
+/*    display: flex;*/
+/*    gap: 8px;*/
+/*}*/
+/*.msg-row.left {*/
+/*    flex-direction: row;*/
+/*}*/
+/*.msg-row.right {*/
+/*    flex-direction: row-reverse;*/
+/*}*/
+
+/*.avatar {*/
+/*    width: 22px;*/
+/*    height: 22px;*/
+/*    border-radius: 999px;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    font-size: 10px;*/
+/*    background: #eff6ff;*/
+/*    color: var(--accent);*/
+/*    flex-shrink: 0;*/
+/*}*/
+/*.msg-row.right .avatar {*/
+/*    background: #2563eb;*/
+/*    color: #fff;*/
+/*}*/
+
+/*.bubble {*/
+/*    max-width: 74%;*/
+/*    padding: 8px 10px;*/
+/*    border-radius: var(--radius-md);*/
+/*    border: 1px solid var(--border-subtle);*/
+/*    background: var(--bg-soft);*/
+/*    font-size: 12px;*/
+/*    line-height: 1.7;*/
+/*    color: var(--text-main);*/
+/*}*/
+/*.msg-row.right .bubble {*/
+/*    background: #2563eb;*/
+/*    color: #fff;*/
+/*    border-color: #2563eb;*/
+/*}*/
+
+/*.bubble.thinking {*/
+/*    display: inline-flex;*/
+/*    gap: 4px;*/
+/*}*/
+/*.bubble.thinking .dot {*/
+/*    width: 4px;*/
+/*    height: 4px;*/
+/*    border-radius: 999px;*/
+/*    background: #9ca3af;*/
+/*    animation: blink 1s infinite ease-in-out;*/
+/*}*/
+/*@keyframes blink {*/
+/*    0%,100% { opacity:.2; transform:translateY(0); }*/
+/*    50% { opacity:1; transform:translateY(-1px); }*/
+/*}*/
+
+/*!* 输入区域 *!*/
+/*.chat-input-area {*/
+/*    padding: 8px 8px 6px;*/
+/*    border-radius: var(--radius-md);*/
+/*    border: 1px solid var(--border-subtle);*/
+/*    background: var(--bg-panel);*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    gap: 6px;*/
+/*}*/
+/*.tips {*/
+/*    font-size: 10px;*/
+/*    color: var(--text-sub);*/
+/*}*/
+/*.input-row {*/
+/*    display: flex;*/
+/*    gap: 8px;*/
+/*}*/
+
+/*textarea {*/
+/*    flex: 1;*/
+/*    padding: 8px 10px;*/
+/*    min-height: 52px;*/
+/*    max-height: 140px;*/
+/*    resize: none;*/
+/*    border-radius: var(--radius-md);*/
+/*    border: 1px solid var(--border-subtle);*/
+/*    font-size: 12px;*/
+/*    line-height: 1.7;*/
+/*    outline: none;*/
+/*    background: var(--bg-panel);*/
+/*    color: var(--text-main);*/
+/*    font-family: inherit;*/
+/*}*/
+
+/*textarea:focus {*/
+/*    border-color: var(--accent);*/
+/*    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);*/
+/*}*/
+
+/*textarea:disabled {*/
+/*    background: var(--bg-soft);*/
+/*    color: var(--text-sub);*/
+/*    cursor: not-allowed;*/
+/*}*/
+
+/*.btn-send {*/
+/*    padding: 9px 14px;*/
+/*    border-radius: 999px;*/
+/*    border: 1px solid var(--accent);*/
+/*    background: var(--accent);*/
+/*    color: #fff;*/
+/*    font-size: 12px;*/
+/*    font-weight: 600;*/
+/*    cursor: pointer;*/
+/*    white-space: nowrap;*/
+/*}*/
+/*.btn-send:disabled {*/
+/*    opacity: .6;*/
+/*    cursor: not-allowed;*/
+/*}*/
+
+/*!* 模态框样式 *!*/
+/*.modal-overlay {*/
+/*    position: fixed;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    bottom: 0;*/
+/*    background: rgba(0,0,0,0.5);*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    z-index: 1000;*/
+/*}*/
+
+/*.modal-content {*/
+/*    background: var(--bg-panel);*/
+/*    padding: 20px;*/
+/*    border-radius: var(--radius-xl);*/
+/*    width: 90%;*/
+/*    max-width: 400px;*/
+/*}*/
+
+/*.modal-content h3 {*/
+/*    margin-top: 0;*/
+/*    margin-bottom: 16px;*/
+/*}*/
+
+/*.form-actions {*/
+/*    margin-top: 16px;*/
+/*    display: flex;*/
+/*    gap: 8px;*/
+/*}*/
+
+/*.btn-primary {*/
+/*    background: var(--accent);*/
+/*    color: white;*/
+/*    border: none;*/
+/*    padding: 8px 16px;*/
+/*    border-radius: var(--radius-md);*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.btn-cancel {*/
+/*    background: var(--bg-soft);*/
+/*    color: var(--text-sub);*/
+/*    border: 1px solid var(--border-subtle);*/
+/*    padding: 8px 16px;*/
+/*    border-radius: var(--radius-md);*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*!* 滚动条 *!*/
+/*::-webkit-scrollbar {*/
+/*    width: 6px;*/
+/*}*/
+/*::-webkit-scrollbar-thumb {*/
+/*    background: #d4d4d8;*/
+/*    border-radius: 999px;*/
+/*}*/

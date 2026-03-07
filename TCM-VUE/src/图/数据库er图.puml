@@ -1,0 +1,42 @@
+@startuml
+
+' Define entities
+entity "学生" as Student {
+  + 学号 : INT
+  姓名 : VARCHAR(50)
+  年龄 : INT
+}
+
+entity "课程" as Course {
+  + 课程编号 : INT
+  课程名称 : VARCHAR(100)
+}
+
+entity "教师" as Teacher {
+  + 教师编号 : INT
+  姓名 : VARCHAR(50)
+}
+
+entity "选修" as Elective {
+  + 选修编号 : INT
+}
+
+entity "成绩" as Grade {
+  + 成绩编号 : INT
+  分数 : INT
+}
+
+entity "教室" as Classroom {
+  + 教室编号 : INT
+  教室名称 : VARCHAR(50)
+}
+
+' Define relationships
+Student -- Elective : 选修
+Course -- Elective : 选修
+Teacher -- Course : 教授
+Elective -- Grade : 获得成绩
+Course -- Grade : 计算成绩
+Classroom -- Course : 上课地点
+
+@enduml

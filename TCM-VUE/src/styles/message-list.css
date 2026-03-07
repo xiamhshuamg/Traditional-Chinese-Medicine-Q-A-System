@@ -1,0 +1,181 @@
+.chat-body{
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.msg-list{
+    flex: 1;
+    min-height: 0;
+    overflow:auto;
+    padding: 18px 22px;
+    display:flex;
+    flex-direction:column;
+    gap: 14px;
+}
+
+.welcome{
+    padding: 18px 16px;
+    background: rgba(15,23,42,0.035);
+    border: 1px solid rgba(15,23,42,0.07);
+    border-radius: var(--radius-xl);
+    color: rgba(15,23,42,0.72);
+}
+.welcome-title{
+    font-size: 15px;
+    font-weight: 700;
+    color: rgba(15,23,42,0.86);
+    margin-bottom: 6px;
+}
+.welcome-sub{
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.msg-row{ display:flex; align-items:flex-start; }
+.msg-row.left{ justify-content:flex-start; }
+.msg-row.right{ justify-content:flex-end; }
+.msg-row.center{ justify-content:center; }
+
+.bubble{
+    max-width: 78%;
+    word-break: break-word;
+    font-size: 14px;
+    line-height: 1.85;
+}
+
+.bubble-doctor{
+    background: rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    padding: 12px 14px;
+    border-radius: var(--radius-xl);
+    color: rgba(15, 23, 42, 0.86);
+}
+
+.bubble-thinking{
+    opacity: .95;
+    font-size: 13px;
+}
+
+.bubble-system{
+    display: inline-block;
+    background: rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    color: rgba(15, 23, 42, 0.72);
+    font-size: 13px;
+}
+/* 顶部淡蓝提示块 */
+.kg-banner{
+    align-self: stretch;
+    background: rgba(14, 165, 233, 0.10);
+    border: 1px solid rgba(14, 165, 233, 0.22);
+    color: rgba(3, 105, 161, 0.95);
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* 让“真正输出内容”不带气泡背景 */
+.bubble-ai{
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    color: rgba(15,23,42,0.92);
+}
+
+/* 用户消息你想保留气泡就保留，不要的话同样改透明 */
+.bubble-user{
+    background: rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    padding: 10px 12px;
+    border-radius: 14px;
+}
+
+
+.kg-banner-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+}
+
+.kg-toggle{
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity .12s ease, background .12s ease;
+}
+
+.kg-banner:hover .kg-toggle{ opacity: 1; background: rgba(15,23,42,0.06); }
+@media (hover:none){ .kg-toggle{ opacity: 1; } } /* 手机/触屏直接显示 */
+
+.kg-detail{
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(14,165,233,0.22);
+    font-size: 12px;
+    color: rgba(3,105,161,0.95);
+}
+/* 知识图谱气泡的两种状态 */
+.kg-ok {
+    background: rgba(14, 165, 233, 0.10);
+    border-color: rgba(14, 165, 233, 0.22);
+    color: rgba(3, 105, 161, 0.95);
+}
+
+.kg-no {
+    background: rgba(148, 163, 184, 0.10);
+    border-color: rgba(148, 163, 184, 0.22);
+    color: rgba(100, 116, 139, 0.95);
+}
+
+/* 流式输出指示器 */
+.streaming-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #666;
+    animation: blink 1.4s infinite ease-in-out both;
+}
+
+.dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes blink {
+    0%, 80%, 100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+    40% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 正在流式输出的消息气泡 */
+.bubble-ai.is-streaming {
+    border-left: 3px solid rgba(37, 99, 235, 0.3);
+    padding-left: 10px;
+}

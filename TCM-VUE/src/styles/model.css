@@ -1,0 +1,101 @@
+.modal-overlay{
+    position: fixed;
+    inset: 0;
+
+    background: rgba(15,23,42,.45);
+    backdrop-filter: blur(6px);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index: 1000;
+}
+
+.modal-content{
+    width: 92%;
+    max-width: 420px;
+
+    background: rgba(255,255,255,.94);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-lg);
+
+    padding: 20px 18px;
+}
+
+.modal-content h3{
+    margin: 0 0 14px;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.form-group{ margin-bottom: 14px; }
+
+.form-group label{
+    display:block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--text-sub);
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    padding: 12px 12px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+
+    font-size: 14px;
+    background: rgba(255,255,255,.95);
+    color: var(--text-main);
+    outline: none;
+
+    box-shadow: var(--shadow-sm);
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color: rgba(22,124,106,.45);
+    box-shadow: var(--ring);
+}
+
+.form-actions{
+    display:flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.btn-primary{
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 999px;
+
+    border: 1px solid rgba(22,124,106,.35);
+    background: linear-gradient(135deg, var(--accent), #1f9a82);
+    color: #fff;
+
+    font-weight: 900;
+    cursor:pointer;
+    transition: transform .12s ease, filter .12s ease;
+}
+.btn-primary:hover{
+    transform: translateY(-1px);
+    filter: brightness(1.02);
+}
+
+.btn-cancel{
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 999px;
+
+    background: rgba(100,116,139,.10);
+    color: var(--text-sub);
+
+    border: 1px solid rgba(100,116,139,.18);
+    cursor:pointer;
+    transition: transform .12s ease, background .12s ease;
+}
+.btn-cancel:hover{
+    background: rgba(100,116,139,.14);
+    transform: translateY(-1px);
+}

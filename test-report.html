@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>测试报告</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .summary { background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
+        .passed { color: green; }
+        .failed { color: red; }
+        .skipped { color: orange; }
+        .test-class { margin-bottom: 20px; }
+        .test-case { padding: 5px; border-left: 4px solid #ccc; margin: 5px 0; }
+        .test-case.passed { border-color: green; background: #e8f5e8; }
+        .test-case.failed { border-color: red; background: #ffe6e6; }
+        .test-case.skipped { border-color: orange; background: #fff3e0; }
+        .progress-bar { height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress { height: 100%; }
+        .progress.passed { background: green; }
+        .progress.failed { background: red; }
+        .progress.skipped { background: orange; }
+    </style>
+</head>
+<body>
+    <h1>测试报告</h1>
+    <div class="summary">
+        <h2>测试概览</h2>
+        <p>总测试用例: 10</p>
+        <p class="passed">通过: 8 (80.0%)</p>
+        <p class="failed">失败: 0 (0.0%)</p>
+        <p class="skipped">跳过: 0 (0.0%)</p>
+        <p>总耗时: 1341ms (平均: 134ms/用例)</p>
+        
+        <div class="progress-bar">
+            <div class="progress passed" style="width: 80.0%"></div>
+            <div class="progress failed" style="width: 0.0%"></div>
+            <div class="progress skipped" style="width: 0.0%"></div>
+        </div>
+    </div>
+    
+    <h2>详细结果</h2>
+    <div class='test-class'>
+        <h3>ChatServiceTest</h3>
+        <div class='test-case passed'>
+            <strong>wb05_cleanResponseWithMixedContent()</strong> - PASSED (1319ms)
+            <div>混合内容清理正确</div>
+        </div>
+        <div class='test-case passed'>
+            <strong>wb01_cleanResponseWithExtraSymbols()</strong> - PASSED (6ms)
+            <div>成功清理响应中的多余符号</div>
+        </div>
+        <div class='test-case passed'>
+            <strong>wb02_cleanResponseWithNull()</strong> - PASSED (9ms)
+            <div>正确处理null输入</div>
+        </div>
+        <div class='test-case passed'>
+            <strong>wb04_cleanResponseWithValidText()</strong> - PASSED (0ms)
+            <div>正常文本清理后保持不变</div>
+        </div>
+        <div class='test-case running'>
+            <strong>wb06_cleanResponseWithOnlySymbols()</strong> - RUNNING (0ms)
+            <div></div>
+        </div>
+        <div class='test-case running'>
+            <strong>wb07_cleanResponseWithSpacesAndSymbols()</strong> - RUNNING (0ms)
+            <div></div>
+        </div>
+        <div class='test-case passed'>
+            <strong>wb09_cleanResponseWithDoubleSymbols()</strong> - PASSED (2ms)
+            <div>两个符号正确处理</div>
+        </div>
+        <div class='test-case passed'>
+            <strong>wb03_cleanResponseWithEmptyString()</strong> - PASSED (2ms)
+            <div>正确处理空字符串输入</div>
+        </div>
+        <div class='test-case passed'>
+            <strong>wb08_cleanResponseWithSingleDash()</strong> - PASSED (1ms)
+            <div>单个破折号正确处理</div>
+        </div>
+        <div class='test-case passed'>
+            <strong>wb10_cleanResponsePreservesWhitespace()</strong> - PASSED (2ms)
+            <div>空格处理正确</div>
+        </div>
+    </div>
+    
+    <script>
+        // 自动计算报告生成时间
+        document.write('<p><small>报告生成时间: ' + new Date().toLocaleString() + '</small></p>');
+    </script>
+</body>
+</html>
